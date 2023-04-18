@@ -132,9 +132,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 293383019}
+  - component: {fileID: 293383016}
   - component: {fileID: 293383018}
   - component: {fileID: 293383017}
-  - component: {fileID: 293383016}
   m_Layer: 0
   m_Name: rope_Base
   m_TagString: Untagged
