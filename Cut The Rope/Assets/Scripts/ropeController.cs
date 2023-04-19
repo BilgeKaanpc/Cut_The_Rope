@@ -8,7 +8,9 @@ public class ropeController : MonoBehaviour
 
     public Ball _Ball;
     public int connectionCount = 5;
-    public GameObject connectionPrefab;
+
+    public GameObject[] ropePool;
+    public string hingeName;
     void Start()
     {
         createRope();
@@ -20,17 +22,17 @@ public class ropeController : MonoBehaviour
 
         for(int i = 0; i < connectionCount; i++)
         {
-            GameObject connection = Instantiate(connectionPrefab,transform);
-            HingeJoint2D joint = connection.GetComponent<HingeJoint2D>();
+            ropePool[i].SetActive(true);
+            HingeJoint2D joint = ropePool[i].GetComponent<HingeJoint2D>();
             joint.connectedBody = previousConnection;
 
             if(i < connectionCount - 1)
             {
-                previousConnection = connection.GetComponent<Rigidbody2D>();
+                previousConnection = ropePool[i].GetComponent<Rigidbody2D>();
             }
             else
             {
-                _Ball.Connection(connection.GetComponent<Rigidbody2D>());
+                _Ball.Connection(ropePool[i].GetComponent<Rigidbody2D>(), hingeName);
             }
         }
     }
