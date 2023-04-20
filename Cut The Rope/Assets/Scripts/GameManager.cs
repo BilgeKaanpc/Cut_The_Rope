@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class GameManager : MonoBehaviour
 
     public int ballCount;
     public int goalObjectCount;
+
+    [SerializeField] private GameObject winPanel, losePanel; 
 
     void Update()
     {
@@ -64,17 +67,19 @@ public class GameManager : MonoBehaviour
         {
             if(goalObjectCount > 0)
             {
-
-            }else if (goalObjectCount == 0)
+                StartCoroutine(GameControl());
+            }
+            else if (goalObjectCount == 0)
             {
 
+                StartCoroutine(GameResult(true, 0));
             }
         }
         else
         {
             if(goalObjectCount == 0)
             {
-
+                StartCoroutine(GameResult(true, 0));
             }
         }
     }
@@ -83,11 +88,55 @@ public class GameManager : MonoBehaviour
         goalObjectCount--;
         if (ballCount == 0 && goalObjectCount == 0)
         {
-
+            StartCoroutine(GameResult(true, 0));
         }
         else if (ballCount == 0 && goalObjectCount > 0)
         {
+            StartCoroutine(GameControl());
+        }
+    }
 
+    IEnumerator GameControl()
+    {
+        yield return new WaitForSeconds(3);
+
+        if(goalObjectCount <= 0)
+        {
+            StartCoroutine(GameResult(true, 0));
+        }
+
+    }
+
+    IEnumerator GameResult(bool win, float time = 3)
+    {
+        yield return new WaitForSeconds(time);
+        if (win)
+        {
+            winPanel.SetActive(true);
+        }
+        else
+        {
+            losePanel.SetActive(true);
+        }
+    }
+
+
+    public void Buttons(bool next)
+    {
+        if (next)
+        {
+            if(SceneManager.GetActiveScene().buildIndex == 4)
+            {
+                SceneManager.LoadScene(0);
+            }
+            else
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            }
+        }
+        else
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
