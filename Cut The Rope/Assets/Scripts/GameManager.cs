@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public GameObject[] hookBases;
+    public GameObject cutEffect;
 
     public int ballCount;
     public int goalObjectCount;
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour
     {
 
         hit.collider.gameObject.SetActive(false);
+        Instantiate(cutEffect, hit.collider.gameObject.transform.position, Quaternion.identity);
         foreach(var item in hookBases)
         {
             if(item.GetComponent<ropeController>().hingeName == hingeName)
@@ -93,6 +95,9 @@ public class GameManager : MonoBehaviour
         else if (ballCount == 0 && goalObjectCount > 0)
         {
             StartCoroutine(GameControl());
+        }else if (goalObjectCount == 0)
+        {
+            StartCoroutine(GameResult(true, 0));
         }
     }
 
@@ -100,8 +105,13 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
 
-        if(goalObjectCount <= 0)
+        if(goalObjectCount >= 0)
         {
+            StartCoroutine(GameResult(false, 0));
+        }
+        else
+        {
+
             StartCoroutine(GameResult(true, 0));
         }
 
